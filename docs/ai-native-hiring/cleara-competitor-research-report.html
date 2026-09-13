@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cleara — Competitor Deep-Dive</title>
+  <style>
+    :root {
+      --ink: #12201e;
+      --muted: #5e6e69;
+      --paper: #f7f7f2;
+      --card: #ffffff;
+      --line: #d8ded8;
+      --mint: #d9f2e5;
+      --mint-strong: #1b8060;
+      --lime: #d9ef75;
+      --amber: #f2c66a;
+      --coral: #e97865;
+      --coral-soft: #fae2db;
+      --blue-soft: #dcebf3;
+      --shadow: 0 18px 55px rgba(18, 32, 30, .08);
+      --serif: Georgia, "Times New Roman", serif;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 0 34px; }
+    .topbar {
+      border-bottom: 1px solid var(--line);
+      background: rgba(247,247,242,.92);
+      position: sticky; top: 0; z-index: 10;
+      backdrop-filter: blur(12px);
+    }
+    .topbar-inner { height: 62px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .brand { font-weight: 800; letter-spacing: -.04em; font-size: 17px; }
+    .brand span { color: var(--mint-strong); }
+    .topmeta { display: flex; align-items: center; gap: 16px; color: var(--muted); font-size: 12px; }
+    .pill { border: 1px solid var(--line); border-radius: 999px; padding: 5px 10px; background: #fff; font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
+    .hero { padding: 80px 0 66px; background: linear-gradient(135deg, #e3f2e8 0%, #f7f7f2 54%, #f4edcf 100%); border-bottom: 1px solid var(--line); }
+    .eyebrow { color: var(--mint-strong); font-size: 11px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { font-family: var(--serif); font-size: clamp(52px, 8vw, 96px); line-height: .91; letter-spacing: -.065em; max-width: 850px; margin: 18px 0 26px; font-weight: 500; }
+    .dek { max-width: 700px; color: #354540; font-size: 20px; line-height: 1.4; margin-bottom: 34px; }
+    .hero-foot { display: flex; align-items: end; justify-content: space-between; gap: 28px; max-width: 960px; }
+    .byline { color: var(--muted); font-size: 12px; }
+    .thesis { max-width: 440px; border-left: 3px solid var(--mint-strong); padding-left: 16px; font-size: 15px; }
+    .section { padding: 72px 0; border-bottom: 1px solid var(--line); }
+    .section-head { display: flex; justify-content: space-between; align-items: baseline; gap: 25px; margin-bottom: 28px; }
+    .section-head h2 { font-family: var(--serif); font-weight: 500; font-size: 38px; line-height: 1; letter-spacing: -.045em; margin: 0; }
+    .section-no { color: var(--mint-strong); font-size: 12px; font-weight: 800; letter-spacing: .1em; }
+    .lead { font-size: 18px; max-width: 760px; color: #344540; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .stat { background: var(--card); border: 1px solid var(--line); padding: 22px; min-height: 145px; box-shadow: 0 4px 12px rgba(18,32,30,.025); }
+    .stat .number { display: block; font-family: var(--serif); font-size: 40px; letter-spacing: -.055em; line-height: 1; margin-bottom: 12px; }
+    .stat .label { color: var(--muted); font-size: 12px; line-height: 1.35; }
+    .stat.green { background: var(--mint); border-color: #b9e3cd; }
+    .stat.yellow { background: #fff1c9; border-color: #f0d995; }
+    .stat.red { background: var(--coral-soft); border-color: #efb5aa; }
+    .signal-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 18px; margin-top: 30px; }
+    .panel { background: var(--card); border: 1px solid var(--line); padding: 28px; box-shadow: var(--shadow); }
+    .panel h3 { font-size: 16px; margin-bottom: 18px; letter-spacing: -.02em; }
+    .signal-list { list-style: none; padding: 0; margin: 0; }
+    .signal-list li { border-top: 1px solid var(--line); padding: 15px 0 14px 26px; position: relative; font-size: 14px; }
+    .signal-list li:first-child { border-top: 0; padding-top: 0; }
+    .signal-list li::before { content: ""; position: absolute; left: 0; top: 22px; width: 9px; height: 9px; border-radius: 50%; background: var(--mint-strong); }
+    .signal-list li:first-child::before { top: 7px; }
+    .signal-list li.warning::before { background: var(--coral); }
+    .signal-list strong { display: block; margin-bottom: 3px; }
+    .confidence { display: inline-block; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; font-weight: 800; padding: 3px 7px; border-radius: 3px; margin: 0 5px 0 0; vertical-align: 1px; }
+    .verified { background: var(--mint); color: #176344; }
+    .reported { background: #fff1c9; color: #835f16; }
+    .alleged { background: var(--coral-soft); color: #984437; }
+    .matrix { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .risk { border: 1px solid var(--line); padding: 17px; min-height: 122px; }
+    .risk .risk-title { font-weight: 800; font-size: 13px; margin-bottom: 7px; }
+    .risk p { font-size: 12px; color: var(--muted); margin: 0; }
+    .risk.high { background: var(--coral-soft); border-color: #efb5aa; }
+    .risk.medium { background: #fff4d9; border-color: #eed79c; }
+    .risk.low { background: var(--mint); border-color: #b9e3cd; }
+    .bar-row { margin: 16px 0 20px; }
+    .bar-label { display: flex; justify-content: space-between; gap: 16px; font-size: 12px; margin-bottom: 7px; }
+    .bar-label span:last-child { color: var(--muted); }
+    .bar { height: 9px; background: #e9ece7; border-radius: 20px; overflow: hidden; }
+    .bar i { display: block; height: 100%; border-radius: 20px; background: var(--coral); }
+    .bar i.green { background: var(--mint-strong); }
+    .quote { margin: 26px 0 0; border-top: 1px solid var(--line); padding-top: 20px; font-family: var(--serif); font-size: 22px; line-height: 1.22; letter-spacing: -.025em; }
+    .quote cite { display: block; color: var(--muted); font-family: var(--sans); font-size: 11px; font-style: normal; line-height: 1.4; margin-top: 14px; }
+    .timeline { position: relative; margin: 25px 0 0 10px; padding-left: 27px; border-left: 1px solid #b8c5be; }
+    .event { position: relative; padding: 0 0 29px; }
+    .event:last-child { padding-bottom: 0; }
+    .event::before { content: ""; position: absolute; left: -33px; top: 4px; width: 11px; height: 11px; border-radius: 50%; background: var(--mint-strong); border: 3px solid var(--paper); box-shadow: 0 0 0 1px var(--mint-strong); }
+    .event-date { color: var(--mint-strong); font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 5px; }
+    .event-title { font-weight: 800; font-size: 14px; margin-bottom: 4px; }
+    .event p { color: var(--muted); font-size: 13px; margin-bottom: 0; }
+    .founders { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .founder { border-top: 3px solid var(--ink); background: #fff; padding: 22px; }
+    .founder h3 { margin-bottom: 3px; font-size: 18px; }
+    .founder .role { color: var(--mint-strong); font-size: 11px; text-transform: uppercase; letter-spacing: .1em; font-weight: 800; margin-bottom: 14px; }
+    .founder p { color: var(--muted); font-size: 13px; margin-bottom: 0; }
+    .compare { overflow-x: auto; border: 1px solid var(--line); background: #fff; }
+    table { width: 100%; min-width: 750px; border-collapse: collapse; font-size: 13px; }
+    th { background: var(--ink); color: #fff; text-align: left; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; padding: 14px 16px; }
+    td { padding: 15px 16px; border-top: 1px solid var(--line); vertical-align: top; }
+    tr.highlight td { background: var(--mint); font-weight: 600; }
+    td:first-child { font-weight: 800; }
+    .small { color: var(--muted); font-size: 11px; line-height: 1.4; }
+    .audiences { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .audience { background: #fff; border: 1px solid var(--line); padding: 24px; display: flex; flex-direction: column; min-height: 245px; }
+    .audience h3 { font-size: 17px; margin-bottom: 12px; }
+    .audience p { font-size: 14px; color: #40504b; }
+    .recommendation { border-top: 1px solid var(--line); padding-top: 13px; margin-top: auto; font-size: 13px; }
+    .recommendation b { color: var(--mint-strong); }
+    .footer { padding: 38px 0 65px; color: var(--muted); font-size: 11px; }
+    .footer strong { color: var(--ink); }
+    .source-note { border-left: 3px solid var(--amber); padding-left: 15px; margin-top: 28px; font-size: 12px; color: var(--muted); }
+    @media (max-width: 800px) {
+      .wrap { padding: 0 20px; }
+      .hero { padding: 55px 0 45px; }
+      .hero-foot, .section-head { display: block; }
+      .thesis { margin-top: 30px; }
+      .grid-4, .founders, .audiences { grid-template-columns: 1fr 1fr; }
+      .signal-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 520px) {
+      .topmeta { display: none; }
+      h1 { font-size: 56px; }
+      .dek { font-size: 17px; }
+      .grid-4, .founders, .audiences, .matrix { grid-template-columns: 1fr; }
+      .section { padding: 52px 0; }
+      .section-head h2 { font-size: 32px; }
+    }
+    @media print {
+      .topbar { position: static; }
+      .hero { padding-top: 45px; }
+      .section { break-inside: avoid; }
+      .panel, .stat { box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="wrap topbar-inner">
+      <div class="brand">FIELD NOTE <span>/ 026</span></div>
+      <div class="topmeta"><span>Cleara</span><span class="pill">Competitor brief</span><span>Sep 2026</span></div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="wrap">
+        <div class="eyebrow">Deep-dive research report · decision edition</div>
+        <h1>Cleara is<br>selling trust.</h1>
+        <p class="dek">The AI talent agent has credible founders, real marketplace traction signals, and a strong launch. But the central question is not whether Cleara can create introductions. It is whether its acquisition and data practices support the candidate-first position it claims.</p>
+        <div class="hero-foot">
+          <div class="byline">Prepared from public sources and user reports<br>Snapshot: September 2026</div>
+          <div class="thesis"><strong>Bottom line.</strong> Cleara is worth watching and selectively testing, but the “getblona.com” outreach, consent complaints, and bimodal review pattern are material trust risks—not footnotes.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head"><h2>At a glance</h2><div class="section-no">01 / EXECUTIVE READ</div></div>
+        <div class="grid-4">
+          <div class="stat green"><span class="number">$3M</span><span class="label">Pre-seed round led by 1984 Ventures</span></div>
+          <div class="stat yellow"><span class="number">80K+</span><span class="label">Candidates claimed by the company</span></div>
+          <div class="stat green"><span class="number">#1</span><span class="label">Product of the Day on Product Hunt</span></div>
+          <div class="stat red"><span class="number">20%</span><span class="label">One-star share of Trustpilot reviews, approximately</span></div>
+        </div>
+        <div class="signal-grid">
+          <div class="panel">
+            <h3>What the evidence says</h3>
+            <ul class="signal-list">
+              <li><span class="confidence verified">Verified</span><strong>The company is real and its founding team is credible.</strong> Prior work includes naklar.io, Superchat, Blona, Lofino, and a Hedera infrastructure company.</li>
+              <li><span class="confidence reported">Company-reported</span><strong>The growth story is compelling but unaudited.</strong> Cleara reports $1M+ ARR, 40%+ month-over-month growth, 80,000–85,000 candidates, and 600–900+ startups.</li>
+              <li class="warning"><span class="confidence alleged">Independent complaints</span><strong>The trust problem is specific and recurring.</strong> Reviewers describe unsolicited AI-persona outreach, scraped profiles, unclear consent, and an unrelated sender domain.</li>
+              <li class="warning"><span class="confidence verified">Corroborated signal</span><strong>The outreach pattern is not isolated to one review.</strong> A Mastodon post documents the same “Sophia” / “getblona.com” pattern independently.</li>
+            </ul>
+          </div>
+          <div class="panel">
+            <h3>Risk dashboard</h3>
+            <div class="matrix">
+              <div class="risk high"><div class="risk-title">Candidate trust</div><p>High. Outreach can resemble the recruiter spam Cleara says it replaces.</p></div>
+              <div class="risk high"><div class="risk-title">Data / consent</div><p>High. Scraping and auto-enrollment complaints create regulatory and reputational exposure.</p></div>
+              <div class="risk medium"><div class="risk-title">Competitive pressure</div><p>Medium–high. Jack &amp; Jill and Dex have materially more disclosed capital.</p></div>
+              <div class="risk low"><div class="risk-title">Founder execution</div><p>Low–medium. Prior operating histories are unusually concrete for this stage.</p></div>
+            </div>
+            <div class="quote">“The central credibility risk is not the AI. It is the funnel.”<cite>Interpretation of the report’s strongest cross-source signal</cite></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head"><h2>The trust gap</h2><div class="section-no">02 / THE CORE RISK</div></div>
+        <p class="lead">Cleara’s stated promise is candidate advocacy: understand a person, match them to the right startup, and make a warm introduction. The complaints describe a different first touch—a simulated recruiter relationship that begins before clear permission.</p>
+        <div class="signal-grid">
+          <div class="panel">
+            <h3>Complaint pattern, not a single anecdote</h3>
+            <div class="bar-row"><div class="bar-label"><span>5-star reviews</span><span>~77%</span></div><div class="bar"><i class="green" style="width:77%"></i></div></div>
+            <div class="bar-row"><div class="bar-label"><span>1-star reviews</span><span>~20%</span></div><div class="bar"><i style="width:20%"></i></div></div>
+            <p class="small">Trustpilot is approximately 4.0/5 across 76 reviews, but the distribution is bimodal. The report treats both positive and negative reviews as unverified user opinions; the negative cluster earns attention because the complaints are specific, repeated, and independently corroborated.</p>
+          </div>
+          <div class="panel">
+            <h3>What reviewers repeatedly describe</h3>
+            <ul class="signal-list">
+              <li class="warning"><strong>Human-sounding AI personas</strong> “Sarah,” “Sophia,” “Lisa,” and “Daniel” present in the first person.</li>
+              <li class="warning"><strong>Unrelated sender domain</strong> Messages from <em>getblona.com</em>, connected to founder Sebastian Scott’s prior company Blona.</li>
+              <li class="warning"><strong>Unclear consent</strong> LinkedIn information allegedly used to create profiles, with some users auto-enrolled after sharing a resume for a specific role.</li>
+              <li class="warning"><strong>Persistence</strong> Multiple follow-ups, including to inboxes recipients say they do not use professionally.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="source-note"><strong>Important qualification:</strong> These are allegations and user reports, not adjudicated findings. Cleara replies to many negative reviews, denies posting fake jobs, says some listings are anonymized for confidentiality, and offers to resolve complaints. That responsive posture does not remove the need to clarify sourcing and consent.</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head"><h2>How the story got here</h2><div class="section-no">03 / COMPANY &amp; SIGNALS</div></div>
+        <div class="signal-grid">
+          <div class="panel">
+            <h3>Company trajectory</h3>
+            <div class="timeline">
+              <div class="event"><div class="event-date">2023–2025</div><div class="event-title">Founder’s prior AI-for-OEMs venture: Blona</div><p>The prior company becomes relevant because Cleara’s outreach is reported to originate from getblona.com.</p></div>
+              <div class="event"><div class="event-date">Oct 2025</div><div class="event-title">Lead investor first meets the team</div><p>1984 Ventures later described the company at roughly 6,000 candidates and 100 startups at that point.</p></div>
+              <div class="event"><div class="event-date">Feb–Apr 2026</div><div class="event-title">$3M pre-seed and public launch</div><p>Funding-close dates vary across trackers; April 28 is the most consistently cited public announcement date.</p></div>
+              <div class="event"><div class="event-date">Apr 28, 2026</div><div class="event-title">Product Hunt launch</div><p>#1 Product of the Day, #2 of the Week, 741 upvotes, and about 1.5K followers.</p></div>
+              <div class="event"><div class="event-date">Sep 2026</div><div class="event-title">Trust and privacy concerns become the key diligence item</div><p>Public complaints and independent corroboration shift the question from “can it grow?” to “can it grow without eroding trust?”</p></div>
+            </div>
+          </div>
+          <div class="panel">
+            <h3>Founding team</h3>
+            <div class="founders">
+              <div class="founder"><h3>Sebastian Scott</h3><div class="role">CEO</div><p>3x founder; naklar.io tutoring marketplace; Blona; firstminute Capital fellow / interim analyst. Studied at TUM, LMU Munich, Columbia, and Tsinghua programs.</p></div>
+              <div class="founder"><h3>Alexander Farr</h3><div class="role">COO</div><p>Former Flash Ventures associate and Superchat Chief of Staff. Reportedly helped scale Superchat from roughly €3M to €10M ARR; conducted 800+ interviews and hired 80+ people.</p></div>
+              <div class="founder"><h3>Daniel Wintermeyer</h3><div class="role">CTO</div><p>Former Hedera NFT infrastructure co-founder and Lofino Head of Engineering. Coding since age 12; led a team of roughly 15 engineers at Lofino.</p></div>
+            </div>
+            <div class="quote">The team’s prior execution is a genuine positive. It makes the trust gap more consequential, not less: this is a company capable of building a sophisticated acquisition machine.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head"><h2>Competitive reality</h2><div class="section-no">04 / MARKET POSITION</div></div>
+        <p class="lead">Cleara entered a category that became crowded quickly. Its wedge is plausible, but its disclosed funding is not the category’s strongest proof of future distribution.</p>
+        <div class="compare">
+          <table>
+            <thead><tr><th>Company</th><th>Positioning</th><th>Capital / traction</th><th>Commercial model</th></tr></thead>
+            <tbody>
+              <tr class="highlight"><td>Cleara</td><td>Candidate-side AI talent agent; warm intros to startups</td><td>$3M pre-seed; 80K+ candidates claimed</td><td>Free to candidates; company-reported ~15% success fee</td></tr>
+              <tr><td>Jack &amp; Jill</td><td>Dual agent: Jack for talent, Jill for employers</td><td>$20M seed; 49K candidates reportedly spoke with Jack</td><td>10% of first-year salary</td></tr>
+              <tr><td>Dex</td><td>AI voice talent agent focused on engineers</td><td>$8.4M total; roughly $1.8M annualized revenue reported</td><td>20–30% of salary</td></tr>
+              <tr><td>Standout</td><td>“Hollywood agent for startup talent”; anonymous until intro</td><td>YC Spring 2026; 10K+ talent and 60 companies claimed</td><td>Free to talent; success fee to companies</td></tr>
+              <tr><td>Contrario</td><td>AI-augmented recruiter network; more employer-leaning</td><td>$2.3M seed reported; ~$6M revenue reported</td><td>Recruiting network model</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="small" style="margin-top:12px">Funding, revenue, and user counts are drawn from the report’s cited public sources and should be read with each company’s own disclosure standards in mind.</p>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head"><h2>Decision guide</h2><div class="section-no">05 / WHAT TO DO</div></div>
+        <div class="audiences">
+          <div class="audience">
+            <h3>If you’re a candidate</h3>
+            <p>The upside is real for some users: fast introductions and at least some reported hires. The first interaction is the risk surface.</p>
+            <div class="recommendation"><b>Do this:</b> Before sending a resume, ask for the named role, company, data source, and exact opt-in. Request deletion if you never consented. EU users can consider GDPR rights; California users can consider CCPA rights.</div>
+          </div>
+          <div class="audience">
+            <h3>If you’re an employer</h3>
+            <p>The success-fee structure limits initial downside, and one independent Product Hunt reviewer reported two engineering hires with strong profile quality.</p>
+            <div class="recommendation"><b>Do this:</b> Run a controlled pilot and benchmark candidate quality, consent language, and candidate experience against Standout, Jack &amp; Jill, and Dex.</div>
+          </div>
+          <div class="audience">
+            <h3>If you’re an investor</h3>
+            <p>Do not underwrite the headline growth numbers alone. The next value inflection is trust durability, not another candidate-count milestone.</p>
+            <div class="recommendation"><b>Watch:</b> audited retained revenue; complaint mix over time; data-sourcing disclosures; any GDPR, CIPA, or UCL escalation; and differentiation against better-funded rivals.</div>
+          </div>
+        </div>
+        <div class="panel" style="margin-top:18px; background:var(--ink); color:#fff">
+          <h3 style="color:var(--lime)">The diligence question to ask Cleara</h3>
+          <p style="font-family:var(--serif); font-size:28px; line-height:1.15; letter-spacing:-.03em; max-width:820px; margin-bottom:0">“When did this person opt in, what exactly did they opt in to, and can you show us the disclosure they saw?”</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <p><strong>Method note.</strong> This redesign preserves the report’s core distinctions: verified facts, company-reported metrics, and unverified but recurring user allegations. It does not convert allegations into findings.</p>
+      <p>Market-analysis source: Cleara competitor deep-dive · Snapshot dated September 2026.</p>
+    </div>
+  </footer>
+</body>
+</html>
